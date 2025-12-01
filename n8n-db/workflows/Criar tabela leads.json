@@ -1,0 +1,106 @@
+{
+  "name": "Criar tabela leads",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "b2a14c29-4485-442f-85c4-fad391dc6913",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- 1. Criação da Tabela com IF NOT EXISTS\nCREATE TABLE IF NOT EXISTS leads (\n    id SERIAL PRIMARY KEY,\n    nome VARCHAR(100) NOT NULL,\n    email VARCHAR(150) NOT NULL UNIQUE,\n    telefone VARCHAR(20),\n    \n    criado_em TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,\n    atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        32,
+        0
+      ],
+      "id": "972cf2e2-92ee-48fd-ac19-541dc4842389",
+      "name": "Cria tabela leads",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "credentials": {
+        "postgres": {
+          "id": "FVa7zJLRNDLF6Hm0",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        240,
+        0
+      ],
+      "id": "a376f92e-2b19-4a50-942a-adda6e8780ac",
+      "name": "Select leads",
+      "credentials": {
+        "postgres": {
+          "id": "FVa7zJLRNDLF6Hm0",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Cria tabela leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria tabela leads": {
+      "main": [
+        [
+          {
+            "node": "Select leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "909f5852-1c2a-4bfe-931a-b27ad8d7b36d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5a72334560e64f513e90e6533e7a141168104da5e6eaaab251611b358706b186"
+  },
+  "id": "W4Mo0Zz8XaUGfAxY",
+  "tags": []
+}

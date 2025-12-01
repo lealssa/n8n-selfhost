@@ -1,0 +1,252 @@
+{
+  "name": "Cadastra lead",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Novo cadastro",
+        "formDescription": "Cadastre-se para receber as melhores ofertas",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome",
+              "placeholder": "Seu nome...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Seu email...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Telefone",
+              "fieldType": "number",
+              "placeholder": "Seu telefone (apenas números)"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "cadastro"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "681323cd-5fd6-46f2-94a8-4ddc74953940",
+      "name": "Form cadastro",
+      "webhookId": "42e781b3-fc2e-40ca-96d9-7f2ff51f2e7c"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Cadastro completo",
+        "completionMessage": "Em breve você receberá as ofertas no seu email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        944,
+        -16
+      ],
+      "id": "e210bd76-7917-46f3-bed1-6bf10e325fd4",
+      "name": "Form encerramento",
+      "webhookId": "9bc7f122-db20-4708-b94d-87ada0d41cfc"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "BJAHNf5ktIpaXbYZ",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "/projects/ZhZJiCknW0Kg7FS0/datatables/BJAHNf5ktIpaXbYZ"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "keyValue": "={{ $json.Email }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "171423c6-baad-4925-b00b-76ec727823a8",
+      "name": "Pega lead existente",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "BJAHNf5ktIpaXbYZ",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "/projects/ZhZJiCknW0Kg7FS0/datatables/BJAHNf5ktIpaXbYZ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nome": "={{ $('Form cadastro').item.json.Nome }}",
+            "email": "={{ $('Form cadastro').item.json.Email }}",
+            "telefone": "={{ $('Form cadastro').item.json.Telefone }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        688,
+        112
+      ],
+      "id": "2f59ebb9-715d-4fa7-be01-f002bc48b766",
+      "name": "Cadastra lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a94d55f5-1045-457a-a3a0-80931f1c3b97",
+              "leftValue": "={{ $input.item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "345d2d65-93e8-45e7-9ba0-f6cdd8a8651f",
+      "name": "Se lead ja cadastrado"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Form cadastro": {
+      "main": [
+        [
+          {
+            "node": "Pega lead existente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega lead existente": {
+      "main": [
+        [
+          {
+            "node": "Se lead ja cadastrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastra lead": {
+      "main": [
+        [
+          {
+            "node": "Form encerramento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se lead ja cadastrado": {
+      "main": [
+        [
+          {
+            "node": "Form encerramento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cadastra lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "99550077-e050-4b79-af9f-0e03dd831be6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "95c68dfaaf66dc23f5d62e0af8f5937dc3ca8128c3bd4470da681d2291bfb1ae"
+  },
+  "id": "lJjVz6siOyWcaVzB",
+  "tags": []
+}

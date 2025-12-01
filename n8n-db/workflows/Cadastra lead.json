@@ -1,0 +1,199 @@
+{
+  "name": "Cadastra lead",
+  "nodes": [
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nome": "={{ $json.Nome }}",
+            "email": "={{ $json.Email }}",
+            "telefone": "={{ $json.Telefone }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "criado_em",
+              "displayName": "criado_em",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atualizado_em",
+              "displayName": "atualizado_em",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d6171523-36f0-4ba5-bce0-83190703c72c",
+      "name": "Cadastra no banco",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "FVa7zJLRNDLF6Hm0",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "formTitle": "Novo cadastro",
+        "formDescription": "Cadastre-se para receber as melhores ofertas",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome",
+              "placeholder": "Seu nome...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Seu email...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Telefone",
+              "fieldType": "number",
+              "placeholder": "Seu telefone (apenas números)"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "cadastro"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ac7c3d46-38b7-40e7-8988-7e6e83d5f106",
+      "name": "Form cadastro",
+      "webhookId": "42e781b3-fc2e-40ca-96d9-7f2ff51f2e7c"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Cadastro completo",
+        "completionMessage": "Em breve você receberá as ofertas no seu email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        0
+      ],
+      "id": "a7f1232e-3875-4421-acd0-9ad6078d851c",
+      "name": "Form encerramento",
+      "webhookId": "9bc7f122-db20-4708-b94d-87ada0d41cfc"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Form cadastro": {
+      "main": [
+        [
+          {
+            "node": "Cadastra no banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastra no banco": {
+      "main": [
+        [
+          {
+            "node": "Form encerramento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c40d79f0-9f93-4f44-8626-5c6684e9ef28",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5a72334560e64f513e90e6533e7a141168104da5e6eaaab251611b358706b186"
+  },
+  "id": "KyjhRGCmhCNEnsuq",
+  "tags": []
+}

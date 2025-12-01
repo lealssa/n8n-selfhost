@@ -32,7 +32,7 @@ services:
   # 2. pgAdmin (Interface Web)
   # ========================================
   pgadmin:
-    image: docker.io/dpage/pgadmin4:latest
+    image: docker.io/dpage/pgadmin4:9.10
     container_name: pgadmin
     restart: unless-stopped
     ports:
@@ -41,8 +41,10 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-seuemail@ponto.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-master}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'      
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin-init/servers.json:/pgadmin4/servers.json  
     depends_on:
       - postgres
     networks:
